@@ -11,7 +11,7 @@ Edit file `create.json`
 
 ```json
 {
-    "creator": "morea",
+    "creator": "more",
     "vname": "voting",
     "proposals": [{
         "pname": "first",
@@ -27,12 +27,12 @@ Edit file `create.json`
 Run the command
 
 ```shell
-$ cleos push action more.voting create "$( cat create.json)" -p morea
+$ cleos push action more.voting create "$(cat voting/create.json)" -p more
 ```
 Then query the `vrecord` table to view the added voting
 
 ```shell
-$ cleos get table more.voting morea vrecord
+$ cleos get table more.voting more vrecord
 {
   "rows": [{
       "vname": "voting",
@@ -40,12 +40,12 @@ $ cleos get table more.voting morea vrecord
       "proposals": [{
           "pname": "first",
           "description": "the first proposal",
-          "proposer": "morea",
+          "proposer": "more",
           "votes": 0
         },{
           "pname": "second",
           "description": "the second proposal",
-          "proposer": "morea",
+          "proposer": "more",
           "votes": 0
         }
       ]
@@ -62,7 +62,7 @@ Edit file `propose.json`
 ```json
 {
     "proposer": "moreb",
-    "creator": "morea",
+    "creator": "more",
     "vname": "voting",
     "content": {
         "pname": "selectb",
@@ -77,10 +77,10 @@ Run the command
 $ cleos push action more.voting propose "$(cat propose.json)" -p moreb
 ```
 
-Re-query `vrecord` table for user `morea` to view the added proposal
+Re-query `vrecord` table for user `more` to view the added proposal
 
 ```shell
-$ cleos get table more.voting morea vrecord
+$ cleos get table more.voting more vrecord
 {
   "rows": [{
       "vname": "voting",
@@ -88,12 +88,12 @@ $ cleos get table more.voting morea vrecord
       "proposals": [{
           "pname": "first",
           "description": "the first proposal",
-          "proposer": "morea",
+          "proposer": "more",
           "votes": 0
         },{
           "pname": "second",
           "description": "the second proposal",
-          "proposer": "morea",
+          "proposer": "more",
           "votes": 0
         },{
           "pname": "selectb",
