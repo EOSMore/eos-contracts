@@ -36,6 +36,12 @@ struct proposal : public proposal_content {
     EOSLIB_SERIALIZE_DERIVED( proposal, proposal_content, (proposer)(votes))
 };
 
+struct proposal_finder {
+    name pname;
+    proposal_finder(name n) : pname(n) {}
+    bool operator() (const proposal& p) { return p.pname == pname; }
+};
+
 class voting : public contract {
     using contract::contract;
 public:
@@ -85,6 +91,26 @@ public:
     }
 
     // @abi action
+    void unpropose( account_name creator, name vname, name pname ) {
+
+        vrecords record_table(_self, creator);
+        auto record_itr = record_table.find( vname );
+        eosio_assert( record_itr != record_table.end(), "voting with the name not found" );
+
+        auto prop_itr = std::find_if( record_itr->proposals.begin(), record_itr->proposals.end(), proposal_finder(pname) );
+        eosio_assert( prop_itr != record_itr->proposals.end(), "proposal with the name not found" );
+
+        account_name proposer = prop_itr->proposer;
+
+        require_auth(proposer);
+
+        record_table.modify( record_itr, proposer, [&]( auto& row ) {
+            row.proposals.erase( prop_itr );
+        });
+
+    }
+
+    // @abi action
     void cancel( account_name creator, name vname ) {
         require_auth(creator);
 
@@ -108,4 +134,4 @@ private:
     typedef multi_index<N(vrecord), vrecord> vrecords;
 };
 
-EOSIO_ABI( voting, (create)(propose)(cancel) )
+EOSIO_ABI( voting, (create)(propose)(unpropose)(cancel) )

@@ -108,6 +108,24 @@ $ cleos get table more.voting more vrecord
 }
 ```
 
+### Undo a proposal
+
+Edit file `unpropose.json`
+
+```json
+{
+    "creator": "more",
+    "vname": "voting",
+    "pname": "selectb"
+}
+```
+
+Run the command
+
+```shell
+$ cleos push action more.voting unpropose "$(cat voting/unpropose.json)" -p moreb
+```
+
 ### Cancel ad voting
 
 Run the command
