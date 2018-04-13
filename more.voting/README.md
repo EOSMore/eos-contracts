@@ -108,3 +108,11 @@ $ cleos get table more.voting morea vrecord
 }
 ```
 
+### Cancel ad voting
+
+Run the command
+
+```shell
+$ cleos push action more.voting cancel '{"creator":"morea","vname":"voting"}' -p morea
+```
+
