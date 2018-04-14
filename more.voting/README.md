@@ -27,7 +27,7 @@ Edit file `create.json`
 Run the command
 
 ```shell
-$ cleos push action more.voting create "$(cat voting/create.json)" -p more
+$ cleos push action more.voting create "$(cat create.json)" -p more
 ```
 Then query the `vrecord` table to view the added voting
 
@@ -123,14 +123,14 @@ Edit file `unpropose.json`
 Run the command
 
 ```shell
-$ cleos push action more.voting unpropose "$(cat voting/unpropose.json)" -p moreb
+$ cleos push action more.voting unpropose "$(cat unpropose.json)" -p moreb
 ```
 
-### Cancel ad voting
+### Cancel a voting
 
 Run the command
 
 ```shell
-$ cleos push action more.voting cancel '{"creator":"morea","vname":"voting"}' -p morea
+$ cleos push action more.voting cancel '{"creator":"more","vname":"voting"}' -p more
 ```
 
