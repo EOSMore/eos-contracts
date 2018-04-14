@@ -145,6 +145,14 @@ Run the command
 $ cleos push action more.voting vote "$(cat vote.json)" -p morea
 ```
 
+### Reveal voting results
+
+Run the command
+
+```shell
+$ cleos push action more.voting reveal '{"creator":"more","vname":"voting"}' -p more
+```
+
 ### Cancel a voting
 
 Run the command

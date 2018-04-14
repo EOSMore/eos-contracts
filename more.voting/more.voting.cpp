@@ -42,6 +42,10 @@ struct proposal_finder {
     bool operator() (const proposal& p) { return p.pname == pname; }
 };
 
+bool proposal_compare( const proposal& p1, const proposal& p2 ) {
+    return p1.votes > p2.votes;
+}
+
 class voting : public contract {
     using contract::contract;
 public:
@@ -138,13 +142,27 @@ public:
 
     }
 
+    // @abi reveal
+    void reveal( account_name creator, name vname ) {
+        require_auth(creator);
+
+        vrecords record_table(_self, creator);
+        auto record_itr = record_table.find( vname );
+        eosio_assert( record_itr != record_table.end(), "voting with the name not found" );
+
+        record_table.modify( record_itr, creator, [&]( auto& row ) {
+            std::sort( row.proposals.begin(), row.proposals.end(), proposal_compare );
+        });
+
+    }
+
     // @abi action
     void cancel( account_name creator, name vname ) {
         require_auth(creator);
 
         vrecords record_table(_self, creator);
         auto iterator = record_table.find( vname );
-        eosio_assert( iterator != record_table.end(), "voting not found" );
+        eosio_assert( iterator != record_table.end(), "voting with the name not found" );
 
         record_table.erase( iterator );
     }
@@ -163,4 +181,4 @@ private:
     typedef multi_index<N(vrecord), vrecord> vrecords;
 };
 
-EOSIO_ABI( voting, (create)(propose)(unpropose)(vote)(cancel) )
+EOSIO_ABI( voting, (create)(propose)(unpropose)(vote)(reveal)(cancel) )
