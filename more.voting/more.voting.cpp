@@ -127,6 +127,7 @@ private:
         name vname;
         time expiration;
         vector<proposal> proposals;
+        vector<account_name> voters;
 
         name primary_key() const { return vname; }
     };
