@@ -79,6 +79,8 @@ public:
         auto record_itr = record_table.find( vname );
         eosio_assert( record_itr != record_table.end(), "voting with the name not found" );
 
+        eosio_assert( record_itr->expiration < now(), "voting has expired" );
+
         proposal i_proposal = proposal(proposer, content);
 
         auto prop_itr = std::find( record_itr->proposals.begin(), record_itr->proposals.end(), i_proposal );
@@ -96,6 +98,8 @@ public:
         vrecords record_table(_self, creator);
         auto record_itr = record_table.find( vname );
         eosio_assert( record_itr != record_table.end(), "voting with the name not found" );
+
+        eosio_assert( record_itr->expiration < now(), "voting has expired" );
 
         auto prop_itr = std::find_if( record_itr->proposals.begin(), record_itr->proposals.end(), proposal_finder(pname) );
         eosio_assert( prop_itr != record_itr->proposals.end(), "proposal with the name not found" );
@@ -117,6 +121,8 @@ public:
         vrecords record_table(_self, creator);
         auto record_itr = record_table.find( vname );
         eosio_assert( record_itr != record_table.end(), "voting with the name not found" );
+
+        eosio_assert( record_itr->expiration > now(), "voting has expired" );
 
         auto voters_itr = std::find( record_itr->voters.begin(), record_itr->voters.end(), voter );
         eosio_assert( voters_itr == record_itr->voters.end(), "the voter have already voted" );
