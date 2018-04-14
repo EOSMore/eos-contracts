@@ -5,7 +5,7 @@ $ eosiocpp -o contracts/more.voting/more.voting.wast contracts/more.voting/more.
 $ cleos set contract more.voting contracts/more.voting -p more.voting
 ```
 ## run
-### create a voting
+### Create a voting
 
 Edit file `create.json`
 
@@ -124,6 +124,25 @@ Run the command
 
 ```shell
 $ cleos push action more.voting unpropose "$(cat unpropose.json)" -p moreb
+```
+
+### Vote for proposal
+
+Edit file `vote.json`
+
+```json
+{
+    "voter": "morea",
+    "creator": "more",
+    "vname": "voting",
+    "pname": "first"
+}
+```
+
+Run the command
+
+```shell
+$ cleos push action more.voting vote "$(cat vote.json)" -p morea
 ```
 
 ### Cancel a voting

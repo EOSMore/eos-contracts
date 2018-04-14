@@ -111,6 +111,28 @@ public:
     }
 
     // @abi action
+    void vote( account_name voter, account_name creator, name vname, name pname ) {
+        require_auth(voter);
+
+        vrecords record_table(_self, creator);
+        auto record_itr = record_table.find( vname );
+        eosio_assert( record_itr != record_table.end(), "voting with the name not found" );
+
+        auto voters_itr = std::find( record_itr->voters.begin(), record_itr->voters.end(), voter );
+        eosio_assert( voters_itr == record_itr->voters.end(), "the voter have already voted" );
+
+        auto prop_itr = std::find_if( record_itr->proposals.begin(), record_itr->proposals.end(), proposal_finder(pname) );
+        eosio_assert( prop_itr != record_itr->proposals.end(), "proposal with the name not found" );
+
+        record_table.modify( record_itr, voter, [&]( auto& row ) {
+            row.voters.push_back( voter );
+            auto p_itr = std::find_if( row.proposals.begin(), row.proposals.end(), proposal_finder(pname) );
+            p_itr->votes++;
+        });
+
+    }
+
+    // @abi action
     void cancel( account_name creator, name vname ) {
         require_auth(creator);
 
@@ -135,4 +157,4 @@ private:
     typedef multi_index<N(vrecord), vrecord> vrecords;
 };
 
-EOSIO_ABI( voting, (create)(propose)(unpropose)(cancel) )
+EOSIO_ABI( voting, (create)(propose)(unpropose)(vote)(cancel) )
