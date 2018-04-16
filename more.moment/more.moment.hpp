@@ -9,7 +9,9 @@ public:
     moment( account_name self ) :
             contract( self ) {}
 
-    void post(account_name creator, string content);
+    void post( account_name creator, string content );
+
+    void remove( uint64_t id );
 
 private:
     static uint64_t id;
@@ -53,4 +55,4 @@ private:
     typedef multi_index<N(mshare), mshare> mshares;
 };
 
-EOSIO_ABI(moment, (post))
+EOSIO_ABI(moment, (post)(remove))
